@@ -1,0 +1,137 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Edit loglist {% endblock %}
+
+{% block content %}
+
+    <main class="content">
+
+        {% include 'includes/navigation.html' %}
+
+        <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+            <img class="loader-element animate__animated animate__jackInTheBox"
+                 src="{% static 'assets/img/orimba.jpeg' %}" height="60" alt="Volt logo">
+        </div>
+
+        <div class="py-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                    <li class="breadcrumb-item"><a href="#"><span class="fas fa-home"></span></a></li>
+                    <li class="breadcrumb-item"><a href="#">Sawn Log</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'sawnlog' %}">Sawn Log</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sawn ID #{{ sawnlog.sawn_id }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">Log ID #{{ sawnlog.log_id }}</li> 
+                </ol>
+            </nav>
+            <div class="d-flex justify-content-between w-100 flex-wrap">
+                <div class="mb-3 mb-lg-0">
+                    <h1 class="h4">Edit Sawn Log Data</h1>
+                    <!-- <p class="mb-0">You can change and update this transaction</p> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row item-row">
+            <div class="col-12">
+                <div class="card card-body bg-white border-light shadow-sm mb-4">
+                    <h2 class="h5 mb-4">Sawn Log Information</h2>
+                    <form action="{% url 'sawnlog' sawnlog.sawn_id %}" method="post">
+                        {% csrf_token %}
+                        <!-- <div class="row">
+                            {% for field in form %}
+                                <div class="col-md-6 mb-3">
+                                    <div>
+                                        {{ field.label_tag }}{{ field }}
+                                    </div>             
+                                </div>
+                            {% endfor %} 
+                        </div>  -->
+                        <!-- <div>
+                            <label for="sawn_length">Sawn Length:</label>
+                            <input type="text" id="sawn_length" name="sawn_length" value="{{ form.sawn_length.value }}">
+                        </div> -->
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.log_id.errors }}
+                            <label for="log_id">Log ID:</label>
+                            <input type="text" id="log_id" name="log_id" value="{{ form.log_id.value}}" class="form-control" readOnly>
+                            {% comment %} {{ form.log_id}} {% endcomment %}
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.sawn_id.errors }}
+                            <label for="sawn_id">Sawn ID:</label>
+                            <input type="text" id="sawn_id" name="sawn_id" value="{{ form.sawn_id.value}}" class="form-control" readOnly>
+                            {% comment %} {{ form.sawn_id}} {% endcomment %}
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.sawn_length.errors }}
+                            <label for="sawn_length">Sawn Length:</label>
+                            <input type="text" id="sawn_length" name="sawn_length" value="{{ form.sawn_length.value}}" class="form-control">
+                            {% comment %} {{ form.sawn_length}} {% endcomment %}
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.sawn_grade.errors }}
+                            <label for="sawn_grade">Sawn Grade:</label>
+                            <input type="text" id="sawn_grade" name="sawn_grade" value="{{ form.sawn_grade.value}}" class="form-control">
+                            {% comment %} {{ form.sawn_grade}} {% endcomment %}
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.diameter_1.errors }}
+                            <label for="diameter_1">Diameter 1:</label>
+                            <input type="text" id="diameter_1" name="diameter_1" value="{{ form.diameter_1.value}}" class="form-control">
+                            {% comment %} {{ form.diameter_1}} {% endcomment %}
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            {{ form.diameter_2.errors }}
+                            <label for="diameter_2">Diameter 2:</label>
+                            <input type="text" id="diameter_2" name="diameter_2" value="{{ form.diameter_2.value}}" class="form-control">
+                            {% comment %} {{ form.diameter_2}} {% endcomment %}
+                        </div>
+                        <div>
+                            <label class="col-lg-10 mb-0 col-form-label">Average Diameter<i class="material-icons"
+                            style="font-size:16px;color:red">*</i></label>
+                            <div class="col-md-6">
+                            <label id="average_diameter" class="form-control" type="text" aria-label="Disabled input example" readOnly> 
+                        </div>
+                        <div>
+                            <label class="col-lg-10 mb-0 col-form-label">Volume<i class="material-icons"
+                            style="font-size:16px;color:red">*</i></label>
+                            <div class="col-md-6">
+                            <label id="volume" class="form-control" type="text" aria-label="Disabled input example" readOnly> 
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a class="btn btn-secondary" href="{% url 'sawnlog' %}">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        document.addEventListener('input', function () {
+            var diameter1 = parseFloat(document.getElementById('diameter_1').value) || 0;
+            var diameter2 = parseFloat(document.getElementById('diameter_2').value) || 0;
+            var sawnLength = parseFloat(document.getElementById('sawn_length').value) || 0;
+
+            var averageDiameter = (diameter1 + diameter2) / 2;
+            averageDiameter = Math.floor(averageDiameter);
+
+            var volume = averageDiameter * averageDiameter * 0.7854 * sawnLength * 0.000001;
+
+            // Update the displayed average diameter and volume
+            document.getElementById('average_diameter').textContent = averageDiameter.toFixed(2);
+            document.getElementById('volume').textContent = volume.toFixed(2);
+        });
+
+        document.getElementById('average_diameter').readOnly = true;
+   
+
+    </script>
+           
+
+        {% include 'includes/footer.html' %}
+
+    </main>
+
+{% endblock content %}

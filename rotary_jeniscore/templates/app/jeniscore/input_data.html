@@ -1,0 +1,103 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block content %}
+<main class="content">
+
+    {% include 'includes/navigation.html' %}
+
+    <div class="preloader bg-soft flex-column justify-content-center align-items-center">
+        <img class="loader-element animate__animated animate__jackInTheBox"
+             src="{% static 'assets/img/Orimba-Logo.jpeg' %}" height="80" alt="Volt logo">
+    </div>
+
+    <div class="py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="#"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="#">Jenis Core</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'jeniscore' %}">Input Jenis Core</a></li>
+                <li class="breadcrumb-item active" aria-current="page">jeniscore #{{ jeniscore.id_jenis_core }}</li>
+            </ol>
+        </nav>
+
+    <div style="color:#575757; font-style: bold; font-size: 2rem; border-bottom: 1px solid white;text-align: center;">{{title}}</div> 
+    
+    <br><!-- Log on to codeastro.com for more projects -->
+    
+    <form method="post">
+    
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-4 mx-auto">
+            <div class="d-block mb-0 mb-md-0">
+               
+            <div class="form-group mb-3 col-md-6">
+                {{ form.id_jenis_core.errors }}
+                <label for="{{ form.id_jenis_core.id_for_label }}">Jenis Core ID:</label>
+                <input type="text" id="id_jenis_core" name="id_jenis_core" value="" class="form-control">
+                {% comment %} {{ form.log_id }} {% endcomment %}
+            </div>
+
+            <div class="form-group mb-3 col-md-6">
+                {{ form.faktor_koreksi.errors }}
+                <label for="{{ form.faktor_koreksi.id_for_label }}">Faktor Koreksi:</label>
+                <input type="text" name="faktor_koreksi" name="faktor_koreksi" value="" class="form-control">
+            </div>
+            <!-- <div class="form-group mb-3 col-md-6">
+                {{ form.jumlah_potong.errors }}
+                <label for="{{ form.sawn_id.id_for_label }}">Jumlah Potong:</label>
+                <input type="text" id="sawn_id" name="sawn_id" value="" class="form-control">
+                {% comment %} {{ form.sawn_id }} {% endcomment %}
+            </div> -->          
+        </div>
+    <!-- </div> -->
+    </div>
+
+        <br><!-- Log on to codeastro.com for more projects -->
+
+        <div class="align-middle">
+            <button type="submit" class="btn btn-success">{{ savebtn }}</button>
+            {% if title == "New Jenis Core Data" %}
+                <button type="reset" class="btn btn-danger" >Reset</button>
+            {% endif %}
+            {% if delbtn %}
+                <a href="{% url 'delete-JenisCoreData' object.pk %}" class="btn  btn-danger"> Delete Data </a>
+            {% endif %}
+            <a href="{% url 'jeniscore' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+        
+    </form><!-- Log on to codeastro.com for more projects -->
+
+   
+    <!-- <script>
+        // Add an event listener to the input fields
+        document.addEventListener('input', function() {
+            var diameter1 = parseFloat(document.getElementById('id_diameter_1').value) || 0;
+            var diameter2 = parseFloat(document.getElementById('id_diameter_2').value) || 0;
+            var logLength = parseFloat(document.getElementById('id_log_length').value) || 0;
+            var volumeTrimming = parseFloat(document.getElementById('id_volume_trimming').value) || 0;
+            
+            var averageDiameter= (diameter1 + diameter2) / 2 ;
+
+            averageDiameter = Math.floor(averageDiameter);
+
+            var volumeBruto = averageDiameter * averageDiameter * 0.7854 * logLength * 0.0001;
+
+            var volumeNetto = volumeBruto - volumeTrimming;
+            
+            // Update the displayed average diameter
+            document.getElementById('average_diameter').textContent = averageDiameter.toFixed(2);
+            document.getElementById('volume_bruto').textContent = volumeBruto.toFixed(2);
+            document.getElementById('volume_netto').textContent = volumeNetto.toFixed(2);
+        });
+        document.getElementById('average_diameter').readOnly = true;     
+
+    </script> -->
+    {% include 'includes/footer.html' %}
+</main>
+{% endblock content %}
